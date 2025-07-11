@@ -52,10 +52,13 @@ def get_response(user_input):
                     return random.choice(responses[intent])
     return "Please type in lower case and follow my simple response guide."
 
-@app.route('/chat', methods=['POST'])
+@app.route('/chat', methods=['GET', 'POST'])
 def chat():
-    data = request.get_json()
-    user_input = data.get('input', '')
+    if request.method == 'GET':
+        user_input = request.args.get('input', '')
+    else:
+        data = request.get_json()
+        user_input = data.get('input', '')
     response = get_response(user_input)
     return jsonify({'response': response})
 
